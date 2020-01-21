@@ -20,7 +20,7 @@ public class ServiceType {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)	
 	private Integer serviceID;
 	
-	private Double priceList;
+	private Double price;
 	
 	@Enumerated(EnumType.STRING)
 	private TypeOfService service ;
@@ -32,10 +32,10 @@ public class ServiceType {
 		
 	}
 
-	public ServiceType(Integer serviceID, Double priceList) {
+	public ServiceType(Integer serviceID, Double price) {
 		super();
 		this.serviceID = serviceID;
-		this.priceList = priceList;
+		this.price = price;
 	}
 	
 	public Integer getServiceID() {
@@ -46,12 +46,12 @@ public class ServiceType {
 		this.serviceID = serviceID;
 	}
 
-	public Double getPriceList() {
-		return priceList;
+	public Double getPrice() {
+		return price;
 	}
 
-	public void setPriceList(Double priceList) {
-		this.priceList = priceList;
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 	
 	public TypeOfService getService() {

@@ -14,18 +14,27 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Autowired
 	ICustomerDAO dao;
-	
+
+	/*
+	 * public List<Customer> getAllCust() {
+	 * 
+	 * String jpql = "select c from Customer c"; return
+	 * mgr.unwrap(Session.class).createQuery(jpql, Customer.class).getResultList();
+	 * }
+	 */
+
 	@Override
 	public Customer authenticate(Customer customer) {
-		
+
 		Customer temp = new Customer();
 		temp.setEmail(customer.getEmail());
 		temp.setPassword(customer.getPassword());
 		
+		System.out.println(temp);
+		
 		Example<Customer> examplecust = Example.of(temp);
 		
 		Optional<Customer> optional = dao.findOne(examplecust);
-		//select * from Customer c where c.email='' and c.password=''
 		
 		if(optional.isPresent())
 		{
@@ -36,13 +45,13 @@ public class CustomerServiceImpl implements ICustomerService {
 
 	@Override
 	public boolean register(Customer customer) {
+		
 		try {
 			dao.save(customer);
 			return true;
-		}catch(Exception e) {
+		} catch (Exception e) {
 			System.out.println(e);
 		}
 		return false;
 	}
-
 }

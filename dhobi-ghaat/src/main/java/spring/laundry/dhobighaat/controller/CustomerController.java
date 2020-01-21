@@ -16,17 +16,22 @@ public class CustomerController {
 
 	@Autowired
 	ICustomerService service;
-	
-	@RequestMapping(value = "/login",method = RequestMethod.POST)
-	public ResponseEntity<?> m1(@RequestBody Customer customer)
-	{
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	public ResponseEntity<?> m1(@RequestBody Customer customer) {
 		Customer temp = service.authenticate(customer);
-		System.out.println(temp);
-		
-		if(temp != null)
-		{
-			return new ResponseEntity<Customer>(temp,HttpStatus.OK);
+
+		if (temp != null) {
+			return new ResponseEntity<Customer>(temp, HttpStatus.OK);
 		}
-		return new ResponseEntity<String>("Authentication Failed: Invalid Credentials",HttpStatus.OK);
+		return new ResponseEntity<String>("Authentication Failed: Invalid Credentials", HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/register", method = RequestMethod.POST)
+	public ResponseEntity<?> m2(@RequestBody Customer customer) {
+		if (service.register(customer)) {
+			return new ResponseEntity<String>("Successful", HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("Email or Mobile No already exist", HttpStatus.OK);
 	}
 }
