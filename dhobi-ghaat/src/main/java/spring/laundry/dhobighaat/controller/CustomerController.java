@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import spring.laundry.dhobighaat.pojos.Customer;
@@ -48,5 +49,13 @@ public class CustomerController {
 			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
 		}
 		return new ResponseEntity<List<Customer>>(allCustomers,HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/removeCust", method = RequestMethod.DELETE)
+	public ResponseEntity<?> m3(@RequestParam Integer custId) {
+		if (service.removeCustomer(custId)) {
+			return new ResponseEntity<String>("Customer removed Successfully!", HttpStatus.OK);
+		}
+		return new ResponseEntity<String>("Customer removal failed!", HttpStatus.OK);
 	}
 }
