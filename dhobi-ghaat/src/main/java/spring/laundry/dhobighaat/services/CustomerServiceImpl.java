@@ -1,5 +1,6 @@
 package spring.laundry.dhobighaat.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +16,8 @@ public class CustomerServiceImpl implements ICustomerService {
 	@Autowired
 	ICustomerDAO dao;
 
-	/*
-	 * public List<Customer> getAllCust() {
-	 * 
-	 * String jpql = "select c from Customer c"; return
-	 * mgr.unwrap(Session.class).createQuery(jpql, Customer.class).getResultList();
-	 * }
-	 */
-
 	@Override
-	public Customer authenticate(Customer customer) {
+	public Customer login(Customer customer) {
 
 		Customer temp = new Customer();
 		temp.setEmail(customer.getEmail());
@@ -53,5 +46,11 @@ public class CustomerServiceImpl implements ICustomerService {
 			System.out.println(e);
 		}
 		return false;
+	}
+
+	@Override
+	public List<Customer> getAllCustomers() {
+		
+		return dao.findAll();
 	}
 }

@@ -1,5 +1,7 @@
 package spring.laundry.dhobighaat.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,8 @@ public class CustomerController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ResponseEntity<?> m1(@RequestBody Customer customer) {
-		Customer temp = service.authenticate(customer);
+		
+		Customer temp = service.login(customer);
 
 		if (temp != null) {
 			return new ResponseEntity<Customer>(temp, HttpStatus.OK);
@@ -29,9 +32,21 @@ public class CustomerController {
 
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<?> m2(@RequestBody Customer customer) {
+		
 		if (service.register(customer)) {
 			return new ResponseEntity<String>("Successful", HttpStatus.OK);
 		}
 		return new ResponseEntity<String>("Email or Mobile No already exist", HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/listCust", method = RequestMethod.GET)
+	public ResponseEntity<?> m3() {
+		
+		List<Customer> allCustomers = service.getAllCustomers();
+		
+		if (allCustomers.size()==0) {
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		}
+		return new ResponseEntity<List<Customer>>(allCustomers,HttpStatus.OK);
 	}
 }

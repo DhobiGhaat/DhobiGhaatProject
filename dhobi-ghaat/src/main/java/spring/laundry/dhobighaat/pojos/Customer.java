@@ -4,20 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.CollectionTable;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name="customers")
+@JsonIgnoreProperties(value = { "addresses" })
 public class Customer {
 	
 	@Id
@@ -35,11 +35,10 @@ public class Customer {
     
 	private String password;
 	
-	@ElementCollection
-	@CollectionTable(name="cust_address",joinColumns = @JoinColumn(name="cust_id"))
+	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Address> addresses=new ArrayList<>();
 	
-	@OneToMany(mappedBy = "customers", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "customers", cascade = CascadeType.ALL)
 	private List<Order> orders=new ArrayList<>();
 	
 	public Customer() {
@@ -124,6 +123,18 @@ public class Customer {
 	public String toString() {
 		return "Customer [customerId=" + customerId + ", mobNo=" + mobNo + ", password=" + password + ", firstName="
 				+ firstName + ", lastName=" + lastName + ", email=" + email + "]";
+	}
+	
+	public void addaddress(Address addr) {
+		
+		addresses.add(addr);
+		addr.setCustomer(this);
+	}
+	
+	public void removeaddress(Address addr) {
+		
+		addresses.remove(addr);
+		addr.setCustomer(null);
 	}
 	
 }
