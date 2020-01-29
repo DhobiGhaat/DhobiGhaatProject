@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import spring.laundry.dhobighaat.pojos.Order;
 import spring.laundry.dhobighaat.pojos.OrderStatus;
+import spring.laundry.dhobighaat.pojos.TypeOfService;
 import spring.laundry.dhobighaat.services.IOrderService;
+
 @RestController
 @CrossOrigin
 public class OrderController 
@@ -38,12 +40,12 @@ public class OrderController
 		return new ResponseEntity<String>("Authentication Failed: Invalid Credentials",HttpStatus.OK);
 	}
 	
-	@RequestMapping(value= "/createorder",method=RequestMethod.POST)
-	public ResponseEntity<?> createOrder(@RequestBody Order order,@RequestParam Integer id,@RequestParam Integer sid)
+	@RequestMapping(value= "/createorder/{id}",method=RequestMethod.POST)
+	public ResponseEntity<?> createOrder(@RequestBody Order order,@PathVariable Integer id,@RequestParam String serviceType)
 	{
 		try
 		{
-			if(service.createOrder(order,id,sid))
+			if(service.createOrder(order,id,TypeOfService.valueOf(serviceType.toUpperCase())))
 			{
 			   return new ResponseEntity<String>("Order Successfully added",HttpStatus.OK);
 			}
@@ -106,7 +108,7 @@ public class OrderController
 		
 		return new ResponseEntity<String>("Authentication Failed: Invalid Credentials",HttpStatus.OK);
 	}
-	@RequestMapping(value= "/{id}",method =RequestMethod.GET)
+	@RequestMapping(value= "getorderbyid/{id}",method =RequestMethod.GET)
 	public ResponseEntity<?> getOrderById(@PathVariable int id)
 	{
 		Order order=null;

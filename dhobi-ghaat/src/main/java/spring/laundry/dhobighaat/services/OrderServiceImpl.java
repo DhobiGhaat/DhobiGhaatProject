@@ -13,6 +13,7 @@ import spring.laundry.dhobighaat.pojos.Customer;
 import spring.laundry.dhobighaat.pojos.Order;
 import spring.laundry.dhobighaat.pojos.OrderStatus;
 import spring.laundry.dhobighaat.pojos.ServiceType;
+import spring.laundry.dhobighaat.pojos.TypeOfService;
 
 @Service
 public class OrderServiceImpl implements IOrderService {
@@ -24,18 +25,17 @@ public class OrderServiceImpl implements IOrderService {
 	
 	
 	@Override
-	public boolean createOrder(Order order,int id,int sid)
+	public boolean createOrder(Order order,int id,TypeOfService serviceType)
 	{
-		// TODO Auto-generated method stub
 		Customer customer=null;
 		ServiceType st=null;
-		//String jpql;
+		String jpql;
 		try 
 		{
 			customer=mgr.unwrap(Session.class).get(Customer.class, id);
-			//jpql="select s from ServiceType s where service:=ser";
-			//st=mgr.unwrap(Session.class).createQuery(jpql,ServiceType.class).setParameter("ser",plan ).getSingleResult();
-			st=mgr.unwrap(Session.class).get(ServiceType.class, sid);
+			jpql="SELECT s FROM ServiceType as s WHERE s.service=:service";
+			st=mgr.unwrap(Session.class).createQuery(jpql,ServiceType.class).setParameter("service",serviceType ).getSingleResult();
+			//st=mgr.unwrap(Session.class).get(ServiceType.class, sid);
 			order.setCustomers(customer);
 			order.setPlan(st);
 			dao.save(order);
@@ -80,7 +80,6 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public Order getOrderByID(Integer id) 
 	{
-		// TODO Auto-generated method stub
 		Order order=null;
 		try 
 		{
@@ -113,7 +112,6 @@ public class OrderServiceImpl implements IOrderService {
 	@Override
 	public boolean updateOrderByStatus(String status,Integer id)
 	{
-		// TODO Auto-generated method stub
 		Order order=null;
 		try
 		{
@@ -128,6 +126,4 @@ public class OrderServiceImpl implements IOrderService {
 		}
 		return false;
 	}
-	
-
 }

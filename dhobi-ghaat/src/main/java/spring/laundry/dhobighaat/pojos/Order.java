@@ -3,8 +3,11 @@ package spring.laundry.dhobighaat.pojos;
 import java.time.LocalDate;
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "orders")
+@JsonIgnoreProperties(value = { "customers" , "plan" })
 public class Order {
 	
 	@Id
@@ -12,6 +15,8 @@ public class Order {
 	private Integer orderId;
 	
 	private double weight;
+	
+	private LocalDate oderDate;
 	
 	private LocalDate pickUpDate;
 	
@@ -64,6 +69,12 @@ public class Order {
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
+	public LocalDate getOderDate() {
+		return oderDate;
+	}
+	public void setOderDate(LocalDate oderDate) {
+		this.oderDate = oderDate;
+	}
 	public LocalDate getPickUpDate() {
 		return pickUpDate;
 	}
@@ -89,6 +100,4 @@ public class Order {
 	public void setStatus(OrderStatus status) {
 		this.status = status;
 	}
-	
-	
 }
