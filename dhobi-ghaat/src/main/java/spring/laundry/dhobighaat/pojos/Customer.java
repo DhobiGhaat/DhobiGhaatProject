@@ -6,11 +6,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -35,8 +35,8 @@ public class Customer {
     
 	private String password;
 	
-	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<Address> addresses=new ArrayList<>();
+	@OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+	private Address addresses;
 	
 	@OneToMany(mappedBy = "customers", cascade = CascadeType.ALL)
 	private List<Order> orders=new ArrayList<>();
@@ -54,12 +54,12 @@ public class Customer {
 		this.lastName = lastName;
 		this.email = email;
 	}
-	
-	public List<Address> getAddresses() {
+
+	public Address getAddresses() {
 		return addresses;
 	}
 
-	public void setAddresses(List<Address> addresses) {
+	public void setAddresses(Address addresses) {
 		this.addresses = addresses;
 	}
 
@@ -125,16 +125,13 @@ public class Customer {
 				+ firstName + ", lastName=" + lastName + ", email=" + email + "]";
 	}
 	
-	public void addaddress(Address addr) {
-		
-		addresses.add(addr);
-		addr.setCustomer(this);
-	}
-	
-	public void removeaddress(Address addr) {
-		
-		addresses.remove(addr);
-		addr.setCustomer(null);
-	}
-	
+	/*
+	 * public void addaddress(Address addr) {
+	 * 
+	 * addresses.add(addr); addr.setCustomer(this); }
+	 * 
+	 * public void removeaddress(Address addr) {
+	 * 
+	 * addresses.remove(addr); addr.setCustomer(null); }
+	 */
 }

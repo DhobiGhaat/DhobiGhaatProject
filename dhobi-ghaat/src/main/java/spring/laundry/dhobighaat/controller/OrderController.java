@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import spring.laundry.dhobighaat.pojos.Order;
 import spring.laundry.dhobighaat.pojos.OrderStatus;
-import spring.laundry.dhobighaat.pojos.TypeOfService;
 import spring.laundry.dhobighaat.services.IOrderService;
 
 @RestController
@@ -41,11 +40,11 @@ public class OrderController
 	}
 	
 	@RequestMapping(value= "/createorder/{id}",method=RequestMethod.POST)
-	public ResponseEntity<?> createOrder(@RequestBody Order order,@PathVariable Integer id,@RequestParam String serviceType)
+	public ResponseEntity<?> createOrder(@RequestBody Order order,@PathVariable Integer id,@RequestParam String serviceType,@RequestParam String status)
 	{
 		try
 		{
-			if(service.createOrder(order,id,TypeOfService.valueOf(serviceType.toUpperCase())))
+			if(service.createOrder(order,id,serviceType,status))
 			{
 			   return new ResponseEntity<String>("Order Successfully added",HttpStatus.OK);
 			}
@@ -90,12 +89,12 @@ public class OrderController
 		return new ResponseEntity<String>("Authentication Failed: Invalid Credentials",HttpStatus.OK);
 	}
 	
-	@RequestMapping(value= "/updateOrderByStatus/{id}",method =RequestMethod.PUT)
-	public  ResponseEntity<?> updateOrderStatus(@RequestParam String status,@PathVariable Integer id)
+	@RequestMapping(value= "/updateOrderByStatus",method =RequestMethod.PUT)
+	public  ResponseEntity<?> updateOrderStatus(@RequestBody Order order)
 	{	
 		try 
 		{
-			if(service.updateOrderByStatus(status, id))
+			if(service.updateOrderByStatus(order))
 			{
 				return new ResponseEntity<String>("Successfully updated",HttpStatus.OK);
 			}
@@ -104,10 +103,9 @@ public class OrderController
 		{
 			System.out.println(e);
 		}
-		
-		
 		return new ResponseEntity<String>("Authentication Failed: Invalid Credentials",HttpStatus.OK);
 	}
+	
 	@RequestMapping(value= "getorderbyid/{id}",method =RequestMethod.GET)
 	public ResponseEntity<?> getOrderById(@PathVariable int id)
 	{

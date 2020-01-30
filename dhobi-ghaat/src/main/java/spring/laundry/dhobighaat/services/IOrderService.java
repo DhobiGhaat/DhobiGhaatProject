@@ -5,10 +5,10 @@ import spring.laundry.dhobighaat.pojos.*;
 
 public interface IOrderService {
 
-	boolean createOrder(Order order,int id,TypeOfService serviceType);
+	boolean createOrder(Order order,int id,String serviceType,String status);
 	List<Order> getAllOrder();
 	List<Order> getOrderByStatus(OrderStatus status);
 	Order getOrderByID(Integer id);
 	List<Order> getOrderByCustomerID(Integer id);
-	boolean updateOrderByStatus(String status,Integer id);
+	boolean updateOrderByStatus(Order order);
 }

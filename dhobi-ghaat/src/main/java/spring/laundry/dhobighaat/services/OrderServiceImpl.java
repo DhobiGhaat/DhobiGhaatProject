@@ -1,6 +1,7 @@
 package spring.laundry.dhobighaat.services;
 
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -25,19 +26,23 @@ public class OrderServiceImpl implements IOrderService {
 	
 	
 	@Override
-	public boolean createOrder(Order order,int id,TypeOfService serviceType)
+	public boolean createOrder(Order order,int id,String serviceType,String status)
 	{
 		Customer customer=null;
 		ServiceType st=null;
 		String jpql;
 		try 
 		{
+			TypeOfService temp = TypeOfService.valueOf(serviceType.toUpperCase());
 			customer=mgr.unwrap(Session.class).get(Customer.class, id);
 			jpql="SELECT s FROM ServiceType as s WHERE s.service=:service";
-			st=mgr.unwrap(Session.class).createQuery(jpql,ServiceType.class).setParameter("service",serviceType ).getSingleResult();
+			st=mgr.unwrap(Session.class).createQuery(jpql,ServiceType.class).setParameter("service",temp).getSingleResult();
 			//st=mgr.unwrap(Session.class).get(ServiceType.class, sid);
 			order.setCustomers(customer);
 			order.setPlan(st);
+			order.setBill(order.getWeight()*st.getPrice());
+			order.setStatus(OrderStatus.valueOf(status.toUpperCase()));
+			order.setDeliveryDate(order.getPickUpDate().plusDays(3));
 			dao.save(order);
 			return true;
 		}
@@ -110,14 +115,19 @@ public class OrderServiceImpl implements IOrderService {
 	}
 
 	@Override
-	public boolean updateOrderByStatus(String status,Integer id)
+	public boolean updateOrderByStatus(Order order)
 	{
-		Order order=null;
+		// TODO Auto-generated method stub
+		Order temp=null;
+		OrderStatus status;
+		int id;	
 		try
-		{
-			order=mgr.unwrap(Session.class).get(Order.class, id);
-			order.setStatus(OrderStatus.valueOf(status.toUpperCase()));
-			dao.save(order);
+		{	
+			id=order.getOrderId();
+			status=order.getStatus();
+			temp=mgr.unwrap(Session.class).get(Order.class, id);
+			temp.setStatus(status);
+			dao.save(temp);
 			return true;
 		}
 		catch(Exception e)

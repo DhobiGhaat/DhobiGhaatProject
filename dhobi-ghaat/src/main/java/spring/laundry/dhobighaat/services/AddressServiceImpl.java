@@ -71,9 +71,30 @@ public class AddressServiceImpl implements IAddressService {
 		Optional<Address> optional = addrdao.findById(id);
 		
 		if (optional.isPresent()) {
-			Customer temp = optional.get().getCustomer();
-			temp.removeaddress(optional.get());
+			//Customer temp = optional.get().getCustomer();
+			//temp.removeaddress(optional.get());
 			addrdao.deleteById(id);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean updateAddress(Address address) {
+		int id = address.getAddressId();
+		Address temp = new Address();
+		temp.setAddressId(id);
+		Example<Address> example = Example.of(temp);
+		
+		Optional<Address> optional = addrdao.findOne(example);
+		
+		if (optional.isPresent()) {
+			temp = optional.get();
+			temp.setHouseNo(address.getHouseNo());
+			temp.setSociety(address.getSociety());
+			temp.setCity(address.getCity());
+			temp.setPincode(address.getPincode());
+			addrdao.save(temp);
 			return true;
 		}
 		return false;

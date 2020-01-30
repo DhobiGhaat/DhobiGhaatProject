@@ -1,13 +1,22 @@
 package spring.laundry.dhobighaat.pojos;
 
 import java.time.LocalDate;
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "orders")
-@JsonIgnoreProperties(value = { "customers" , "plan" })
+@JsonIgnoreProperties(value = { "customers" })
 public class Order {
 	
 	@Id
@@ -16,7 +25,7 @@ public class Order {
 	
 	private double weight;
 	
-	private LocalDate oderDate;
+	private LocalDate orderDate;
 	
 	private LocalDate pickUpDate;
 	
@@ -28,23 +37,31 @@ public class Order {
 	private double bill;
 	
 	@ManyToOne
+	@JoinColumn(name = "custId")
 	private Customer customers;
 	
 	@ManyToOne
+	@JoinColumn(name = "serviceId")
 	private ServiceType plan;
 	
 	public Order() {
 		
 	}
-	public Order(Integer orderId, double weight, LocalDate pickUpDate, LocalDate deliveryDate, double bill) {
+	
+	public Order(Integer orderId, double weight, LocalDate orderDate, LocalDate pickUpDate, LocalDate deliveryDate,
+			OrderStatus status, double bill, Customer customers, ServiceType plan) {
 		super();
 		this.orderId = orderId;
 		this.weight = weight;
+		this.orderDate = orderDate;
 		this.pickUpDate = pickUpDate;
 		this.deliveryDate = deliveryDate;
+		this.status = status;
 		this.bill = bill;
+		this.customers = customers;
+		this.plan = plan;
 	}
-	
+
 	public Customer getCustomers() {
 		return customers;
 	}
@@ -69,11 +86,11 @@ public class Order {
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
-	public LocalDate getOderDate() {
-		return oderDate;
+	public LocalDate getOrderDate() {
+		return orderDate;
 	}
-	public void setOderDate(LocalDate oderDate) {
-		this.oderDate = oderDate;
+	public void setOrderDate(LocalDate orderDate) {
+		this.orderDate = orderDate;
 	}
 	public LocalDate getPickUpDate() {
 		return pickUpDate;
